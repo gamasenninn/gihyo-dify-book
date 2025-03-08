@@ -1,0 +1,178 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 伍ノ型_パラメータ抽出
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: parameter-extractor
+      id: 1738635450732-source-1738635779689-target
+      source: '1738635450732'
+      sourceHandle: source
+      target: '1738635779689'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: parameter-extractor
+        targetType: end
+      id: 1738635779689-source-1738638542909-target
+      source: '1738635779689'
+      sourceHandle: source
+      target: '1738638542909'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables:
+        - label: ご相談内容
+          max_length: 4096
+          options: []
+          required: true
+          type: paragraph
+          variable: query
+      height: 90
+      id: '1738635450732'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        instruction: "ビジネス企画書を作成するため、以下の情報を抽出してください\n\n industry：ビジネスの業界や業種\n  (※注:デフォルトは農業)\n\
+          target_customer：ターゲットとなる顧客層\n（※注：デフォルトは20代単身者） \nbudget：予算（数値のみ抽出）\n（※注：デフォルトは1000000\n"
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        parameters:
+        - description: 業界・業種
+          name: industry
+          required: false
+          type: string
+        - description: ターゲット顧客
+          name: target_customer
+          required: false
+          type: string
+        - description: 予算
+          name: budget
+          required: false
+          type: number
+        query:
+        - '1738635450732'
+        - query
+        reasoning_mode: prompt
+        selected: false
+        title: パラメーター抽出
+        type: parameter-extractor
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1738635779689'
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1738635779689'
+          - industry
+          variable: output
+        selected: true
+        title: 終了
+        type: end
+      height: 90
+      id: '1738638542909'
+      position:
+        x: 688
+        y: 282
+      positionAbsolute:
+        x: 688
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -20.499904372201627
+      y: -26.845942287091475
+      zoom: 0.8705505632961255

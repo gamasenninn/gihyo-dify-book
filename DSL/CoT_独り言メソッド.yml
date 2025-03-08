@@ -1,0 +1,234 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: CoT_独り言メソッド
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1739603744327-source-1739603747192-target
+      source: '1739603744327'
+      sourceHandle: source
+      target: '1739603747192'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 1739603747192-source-1739603750360-target
+      source: '1739603747192'
+      sourceHandle: source
+      target: '1739603750360'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1739603750360-source-1739603754400-target
+      source: '1739603750360'
+      sourceHandle: source
+      target: '1739603754400'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables:
+        - label: ユーザからの質問
+          max_length: 4096
+          options: []
+          required: true
+          type: paragraph
+          variable: user_input
+      height: 90
+      id: '1739603744327'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1739603744327'
+          - user_input
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o
+          provider: openai
+        prompt_template:
+        - id: fca75e3b-fbe6-4745-a720-29218223a3cd
+          role: system
+          text: 'あなたが考える場合はステップバイステップで独り言で考えます。深く深く考えます。 それらの独り言を明示的に出力しつつ、それを参照し、検証し、さらに深く考えます。 '
+        - id: 974d36a6-e7eb-4513-97f5-dd765ddb4614
+          role: user
+          text: '最初に問題を分析し、どんな解放がベストか計画を立てましょう。それが終わったら本格的に問題を解きます。
+
+            {{#context#}}'
+        selected: false
+        title: LLM解法計画と実行
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1739603747192'
+      position:
+        x: 380
+        y: 282
+      positionAbsolute:
+        x: 380
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1739603747192'
+          - text
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o
+          provider: openai
+        prompt_template:
+        - id: 0225b929-2a48-49ad-80d7-5328febd19a5
+          role: system
+          text: 'あなたが考える場合はステップバイステップで独り言で考えます。深く深く考えます。 それを明示的に出力しつつ、それを参照し、検証し、さらに深く考えます。 '
+        - id: 6ce8053a-47bf-48bc-b310-519f0dfdeb1e
+          role: user
+          text: 'ユーザからの質問に対して、LLMが出した答えが間違っていないかを再検証します。
+
+            検証が正解なら回答をしてください。
+
+
+            ##ユーザの質問
+
+            {{#1739603744327.user_input#}}
+
+            ## LLMの答え
+
+            {{#context#}}'
+        selected: true
+        title: LLM検証
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1739603750360'
+      position:
+        x: 687
+        y: 282
+      positionAbsolute:
+        x: 687
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1739603750360'
+          - text
+          variable: output
+        selected: false
+        title: 終了
+        type: end
+      height: 90
+      id: '1739603754400'
+      position:
+        x: 992
+        y: 282
+      positionAbsolute:
+        x: 992
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 65.30707479465173
+      y: -104.21890901578081
+      zoom: 0.8705505632961241

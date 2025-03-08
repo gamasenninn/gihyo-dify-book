@@ -1,0 +1,184 @@
+app:
+  description: 最初のワークフローを作る
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 最初のワークフロー
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1739588017922-source-1739588173045-target
+      source: '1739588017922'
+      sourceHandle: source
+      target: '1739588173045'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1739588173045-source-1739589009017-target
+      source: '1739588173045'
+      sourceHandle: source
+      target: '1739589009017'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables:
+        - label: テキスト入力
+          max_length: 256
+          options: []
+          required: true
+          type: text-input
+          variable: input
+      height: 90
+      id: '1739588017922'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1739588017922'
+          - input
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: f38109f9-994d-4130-a08d-5629d09f6686
+          role: system
+          text: 'あなたは豊かな共感力をもった優秀な相談者です。
+
+
+            あなたの回答は質問者の励みになります。
+
+
+            ユーザーの質問に親身に共感をもって答えてください。
+
+
+            ときどき有名人の名言なども交えて答えてみると効果的です。質問者が求めるものは時として回答そのものではなく
+
+
+            あなたの共感だったりしますので、バランスよく答えてください。
+
+            '
+        - id: 03e4a9c8-3739-469d-8718-5d48cc0e33e5
+          role: user
+          text: '{{#context#}}'
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1739588173045'
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1739588173045'
+          - text
+          variable: output
+        selected: false
+        title: 終了
+        type: end
+      height: 90
+      id: '1739589009017'
+      position:
+        x: 688
+        y: 282
+      positionAbsolute:
+        x: 688
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 8.499999999999886
+      y: -13.5
+      zoom: 1.0000000000000002

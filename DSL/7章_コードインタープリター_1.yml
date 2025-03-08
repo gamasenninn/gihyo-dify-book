@@ -1,0 +1,313 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 7章_コードインタープリター_1
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1738904260416-source-1738904470721-target
+      source: '1738904260416'
+      sourceHandle: source
+      target: '1738904470721'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: parameter-extractor
+      id: 1738904470721-source-1738905371882-target
+      source: '1738904470721'
+      sourceHandle: source
+      target: '1738905371882'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: parameter-extractor
+        targetType: tool
+      id: 1738905371882-source-1738905682789-target
+      source: '1738905371882'
+      sourceHandle: source
+      target: '1738905682789'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: template-transform
+      id: 1738905682789-source-1738905780089-target
+      source: '1738905682789'
+      sourceHandle: source
+      target: '1738905780089'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: end
+      id: 1738905780089-source-1738906032739-target
+      source: '1738905780089'
+      sourceHandle: source
+      target: '1738906032739'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables:
+        - label: query
+          max_length: 4096
+          options: []
+          required: true
+          type: paragraph
+          variable: query
+      height: 90
+      id: '1738904260416'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: cb40657a-c20f-4515-90ea-37e0a3f8d005
+          role: system
+          text: '適切なコードを作成する。
+
+
+            結果はprint()で表示する形にする。
+
+            input()のような入力関数は使わない。
+
+            '
+        - role: user
+          text: '{{#1738904260416.query#}}'
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1738904470721'
+      position:
+        x: 80
+        y: 410
+      positionAbsolute:
+        x: 80
+        y: 410
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        instruction: pythonコードのみを抽出して
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        parameters:
+        - description: pythonコードを抽出します
+          name: code
+          required: false
+          type: string
+        - description: プログラムを生成するにあたっての説明
+          name: explain
+          required: false
+          type: string
+        query:
+        - '1738904470721'
+        - text
+        reasoning_mode: prompt
+        selected: false
+        title: パラメーター抽出
+        type: parameter-extractor
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1738905371882'
+      position:
+        x: 74.80000000000001
+        y: 577
+      positionAbsolute:
+        x: 74.80000000000001
+        y: 577
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        provider_id: code
+        provider_name: code
+        provider_type: builtin
+        selected: false
+        title: Code Interpreter
+        tool_configurations: {}
+        tool_label: Code Interpreter
+        tool_name: simple_code
+        tool_parameters:
+          code:
+            type: mixed
+            value: '{{#1738905371882.code#}}'
+          language:
+            type: mixed
+            value: python3
+        type: tool
+      height: 54
+      id: '1738905682789'
+      position:
+        x: 454
+        y: 282
+      positionAbsolute:
+        x: 454
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        selected: false
+        template: "## コードの説明\r\n{{ explain }}\r\n\r\n## コード本体\r\n```\r\n{{ code }}\r\
+          \n```\r\n## 結果\r\n{{result}}"
+        title: テンプレート
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1738905682789'
+          - text
+          variable: result
+        - value_selector:
+          - '1738905371882'
+          - code
+          variable: code
+        - value_selector:
+          - '1738905371882'
+          - explain
+          variable: explain
+      height: 54
+      id: '1738905780089'
+      position:
+        x: 454
+        y: 410
+      positionAbsolute:
+        x: 454
+        y: 410
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1738905780089'
+          - output
+          variable: output
+        selected: false
+        title: 終了
+        type: end
+      height: 90
+      id: '1738906032739'
+      position:
+        x: 454
+        y: 577
+      positionAbsolute:
+        x: 454
+        y: 577
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -149.5
+      y: -203.5
+      zoom: 1

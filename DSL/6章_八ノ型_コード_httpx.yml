@@ -1,0 +1,185 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 八ノ型_コード_httpx
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: code
+      id: 1739687158758-source-1739687195222-target
+      source: '1739687158758'
+      sourceHandle: source
+      target: '1739687195222'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: end
+      id: 1739687195222-source-1739687277697-target
+      source: '1739687195222'
+      sourceHandle: source
+      target: '1739687277697'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables:
+        - label: query
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: query
+      height: 90
+      id: '1739687158758'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\n\nimport httpx\n\n# OpenStreetMap Nominatim API を使用して地名から緯度・経度を取得\
+          \ (httpx同期版)\ndef main(location_name : str) ->dict:\n    base_url = \"https://nominatim.openstreetmap.org/search\"\
+          \n    params = {\n        \"q\": location_name,\n        \"format\": \"\
+          json\",\n        \"limit\": 1\n    }\n    headers = {\n        \"User-Agent\"\
+          : \"YourAppName/1.0\"  # OpenStreetMapは User-Agent ヘッダーを要求します\n    }\n\n\
+          \    with httpx.Client() as client:\n        response = client.get(base_url,\
+          \ params=params, headers=headers)\n    \n        if response.status_code\
+          \ == 200:\n            data = response.json()\n            if data:\n  \
+          \              return {\n                    'result':{\n              \
+          \          'lat' : data[0][\"lat\"],\n                        'lon' : data[0][\"\
+          lon\"]\n                     }\n                }\n            else:\n \
+          \               return {\n                    'result':{ \n            \
+          \            'error':f\"No results found for {location_name}\"\n       \
+          \             }\n                }\n        else:\n                return\
+          \ {\n                    'result':{ \n                        'error':f\"\
+          Error: {response.status_code}\"\n                    }\n               \
+          \ }"
+        code_language: python3
+        default_value:
+        - key: result
+          type: object
+          value: '{}'
+        desc: ''
+        error_strategy: default-value
+        outputs:
+          result:
+            children: null
+            type: object
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 1000
+        selected: true
+        title: コード
+        type: code
+        variables:
+        - value_selector:
+          - '1739687158758'
+          - query
+          variable: location_name
+      height: 116
+      id: '1739687195222'
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1739687195222'
+          - result
+          variable: output
+        selected: false
+        title: 終了
+        type: end
+      height: 90
+      id: '1739687277697'
+      position:
+        x: 688
+        y: 282
+      positionAbsolute:
+        x: 688
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -295.0000000000002
+      y: 75.04714969953113
+      zoom: 1.0000000000000002

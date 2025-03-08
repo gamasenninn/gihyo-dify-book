@@ -1,0 +1,350 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: 8章_知識を使って賢くする
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        sourceType: llm
+        targetType: answer
+      id: llm-answer
+      source: llm
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: question-classifier
+      id: 1739867426992-source-1739867436667-target
+      source: '1739867426992'
+      sourceHandle: source
+      target: '1739867436667'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: knowledge-retrieval
+      id: 1739867436667-1-1739867604166-target
+      source: '1739867436667'
+      sourceHandle: '1'
+      target: '1739867604166'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1739867604166-source-llm-target
+      source: '1739867604166'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1739867436667-2-1739867711544-target
+      source: '1739867436667'
+      sourceHandle: '2'
+      target: '1739867711544'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      id: 1739867711544-source-1739867812718-target
+      source: '1739867711544'
+      sourceHandle: source
+      target: '1739867812718'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables: []
+      height: 54
+      id: '1739867426992'
+      position:
+        x: 30
+        y: 288
+      positionAbsolute:
+        x: 30
+        y: 288
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1739867604166'
+          - result
+        desc: ''
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: 6c83fb30-0f08-4e06-b691-6d337108aaa2
+          role: system
+          text: コンテキストを参考にしてユーザからの質問に対する答えを出力してください。
+        - role: user
+          text: '{{#context#}}'
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: llm
+      position:
+        x: 942
+        y: 288
+      positionAbsolute:
+        x: 942
+        y: 288
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#llm.text#}}'
+        desc: ''
+        selected: false
+        title: 回答
+        type: answer
+        variables: []
+      height: 102
+      id: answer
+      position:
+        x: 1246
+        y: 288
+      positionAbsolute:
+        x: 1246
+        y: 288
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        classes:
+        - id: '1'
+          name: 社内文書検索
+        - id: '2'
+          name: 一般質問
+        desc: ''
+        instruction: 'カテゴリは次のように考える
+
+          -社内文書検索
+
+          就業規則や社内文書の検索が必要な場合
+
+          -一般質問
+
+          社内文書検索の必要のないすべての質問'
+        instructions: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        query_variable_selector:
+        - '1739867426992'
+        - sys.query
+        selected: false
+        title: 質問分類器
+        topics: []
+        type: question-classifier
+        vision:
+          enabled: false
+      height: 176
+      id: '1739867436667'
+      position:
+        x: 334
+        y: 288
+      positionAbsolute:
+        x: 334
+        y: 288
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        dataset_ids:
+        - 4b6d470a-a130-44ba-82d5-ffa877797f69
+        desc: ''
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: reranking_model
+          reranking_model:
+            model: rerank-english-v2.0
+            provider: cohere
+          top_k: 4
+        query_variable_selector:
+        - '1739867426992'
+        - sys.query
+        retrieval_mode: multiple
+        selected: false
+        title: 知識取得
+        type: knowledge-retrieval
+      height: 92
+      id: '1739867604166'
+      position:
+        x: 638
+        y: 288
+      positionAbsolute:
+        x: 638
+        y: 288
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: 6eb40862-c295-466c-a9d9-6b9d8e1312a7
+          role: system
+          text: 'あなたは優秀なアシスタントです。ユーザーからの質問に対してステップバイステップで考え
+
+
+            適切な回答をしてください。
+
+            '
+        selected: false
+        title: LLM 2
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1739867711544'
+      position:
+        x: 638
+        y: 419
+      positionAbsolute:
+        x: 638
+        y: 419
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1739867711544.text#}}'
+        desc: ''
+        selected: false
+        title: 回答 2
+        type: answer
+        variables: []
+      height: 102
+      id: '1739867812718'
+      position:
+        x: 942
+        y: 419
+      positionAbsolute:
+        x: 942
+        y: 419
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -129.79999999999995
+      y: 73.50000000000006
+      zoom: 0.7

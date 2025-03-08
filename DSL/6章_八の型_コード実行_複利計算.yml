@@ -1,0 +1,209 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 八の型_コード実行_複利計算
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: code
+      id: 1738646358218-source-1738646406541-target
+      source: '1738646358218'
+      sourceHandle: source
+      target: '1738646406541'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: end
+      id: 1738646406541-source-1738646410788-target
+      source: '1738646406541'
+      sourceHandle: source
+      target: '1738646410788'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables:
+        - label: 初期投資額
+          max_length: 48
+          options: []
+          required: true
+          type: number
+          variable: principal
+        - label: '年利率（例: 5%なら0.05）'
+          max_length: 48
+          options: []
+          required: true
+          type: number
+          variable: rate
+        - label: 投資期間（年）
+          max_length: 48
+          options: []
+          required: true
+          type: number
+          variable: years
+        - label: 毎年の追加投資額（オプション）
+          max_length: 48
+          options: []
+          required: false
+          type: number
+          variable: additional_contribution
+      height: 168
+      id: '1738646358218'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "def main(principal: float, rate: float, years: int, additional_contribution:\
+          \ float = 0) -> dict:\n    \"\"\"\n    複利計算を行う関数\n    \n    :param principal:\
+          \ 初期投資額\n    :param rate: 年利率（例: 5%なら0.05）\n    :param years: 投資期間（年）\n\
+          \    :param additional_contribution: 毎年の追加投資額（オプション）\n    :return: 計算結果を含む辞書\n\
+          \    \"\"\"\n    total_investment = principal\n    current_value = principal\n\
+          \    \n    yearly_results = []\n    \n    for year in range(1, years + 1):\n\
+          \        interest = current_value * rate\n        current_value += interest\
+          \ + additional_contribution\n        total_investment += additional_contribution\n\
+          \        \n        yearly_results.append({\n            \"年\": year,\n \
+          \           \"元本\": f\"{total_investment:,.0f}円\",\n            \"利息\":\
+          \ f\"{interest:,.0f}円\",\n            \"残高\": f\"{current_value:,.0f}円\"\
+          \n        })\n    \n    total_interest = current_value - total_investment\n\
+          \    \n    return{\n        'result':{\n            \"初期投資額\": f\"{principal:,.0f}円\"\
+          ,\n            \"年利率\": f\"{rate:.1%}\",\n            \"投資期間\": f\"{years}年\"\
+          ,\n            \"毎年の追加投資\": f\"{additional_contribution:,.0f}円\",\n    \
+          \        \"最終残高\": f\"{current_value:,.0f}円\",\n            \"合計投資額\": f\"\
+          {total_investment:,.0f}円\",\n            \"合計利息\": f\"{total_interest:,.0f}円\"\
+          ,\n            \"利回り\": f\"{(total_interest / total_investment):.1%}\",\n\
+          \            \"年間結果\": yearly_results\n        }\n    } \n"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: object
+        selected: false
+        title: コード
+        type: code
+        variables:
+        - value_selector:
+          - '1738646358218'
+          - principal
+          variable: principal
+        - value_selector:
+          - '1738646358218'
+          - rate
+          variable: rate
+        - value_selector:
+          - '1738646358218'
+          - years
+          variable: years
+        - value_selector:
+          - '1738646358218'
+          - additional_contribution
+          variable: additional_contribution
+      height: 54
+      id: '1738646406541'
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1738646406541'
+          - result
+          variable: output
+        selected: false
+        title: 終了
+        type: end
+      height: 90
+      id: '1738646410788'
+      position:
+        x: 688
+        y: 282
+      positionAbsolute:
+        x: 688
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -154.44566754759865
+      y: -131.1243620840305
+      zoom: 1.1486983549970353

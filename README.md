@@ -6,4 +6,10 @@
 
 [「生成AIアプリ開発大全」サポートページ](https://nova-join-5c4.notion.site/AI-1a1b1102fb3380b48d8df6fa1c62da0c)
 
+　  
+　
+ 
+なお書籍で使用したデータはこのgithub上のフォルダー/dataにあります。
+
+また、書籍で作成されたアプリのDSLはこのgithub上のフォルダー/DSLにあります。
 

@@ -1,0 +1,219 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 四ノ型_知識取得
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: knowledge-retrieval
+      id: 1738567535478-source-1738567698205-target
+      source: '1738567535478'
+      sourceHandle: source
+      target: '1738567698205'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1738567698205-source-1738568089106-target
+      source: '1738567698205'
+      sourceHandle: source
+      target: '1738568089106'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1738568089106-source-1738568248215-target
+      source: '1738568089106'
+      sourceHandle: source
+      target: '1738568248215'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables:
+        - label: 質問
+          max_length: 4096
+          options: []
+          required: true
+          type: paragraph
+          variable: query
+      height: 90
+      id: '1738567535478'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        dataset_ids:
+        - fd82493f-cfd7-4aa1-84dc-237e3046a900
+        desc: ''
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: reranking_model
+          reranking_model:
+            model: rerank-english-v2.0
+            provider: cohere
+          top_k: 4
+        query_variable_selector:
+        - '1738567535478'
+        - query
+        retrieval_mode: multiple
+        selected: false
+        title: 知識取得
+        type: knowledge-retrieval
+      height: 92
+      id: '1738567698205'
+      position:
+        x: 385
+        y: 282
+      positionAbsolute:
+        x: 385
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1738567698205'
+          - result
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: 07fbc906-ce6d-42e7-b163-f2adb3dffc87
+          role: system
+          text: ユーザからの質問にたいして最も適切な回答を生成する。
+        - role: user
+          text: '##ユーザの質問
+
+            {{#1738567535478.query#}}
+
+            ##コンテキスト
+
+            {{#context#}}'
+        - role: assistant
+          text: ''
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1738568089106'
+      position:
+        x: 689
+        y: 282
+      positionAbsolute:
+        x: 689
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1738568089106'
+          - text
+          variable: output
+        selected: false
+        title: 終了
+        type: end
+      height: 90
+      id: '1738568248215'
+      position:
+        x: 993
+        y: 282
+      positionAbsolute:
+        x: 993
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 242.06150949598043
+      y: 75.84246630142263
+      zoom: 0.5743491774985179

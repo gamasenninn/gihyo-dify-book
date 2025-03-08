@@ -1,0 +1,384 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: 8章_簡単なQ&Aボット
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        sourceType: llm
+        targetType: answer
+      id: llm-answer
+      source: llm
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: question-classifier
+      id: 1739866719580-source-1739866915707-target
+      source: '1739866719580'
+      sourceHandle: source
+      target: '1739866915707'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1739866915707-1-llm-target
+      source: '1739866915707'
+      sourceHandle: '1'
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1739866915707-2-1739867004601-target
+      source: '1739866915707'
+      sourceHandle: '2'
+      target: '1739867004601'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1739866915707-1739866934491-1739867037673-target
+      source: '1739866915707'
+      sourceHandle: '1739866934491'
+      target: '1739867037673'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      id: 1739867004601-source-1739867115107-target
+      source: '1739867004601'
+      sourceHandle: source
+      target: '1739867115107'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      id: 1739867037673-source-1739867136834-target
+      source: '1739867037673'
+      sourceHandle: source
+      target: '1739867136834'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables: []
+      height: 54
+      id: '1739866719580'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: fcfae725-594e-45fc-ad3e-1e12c7c24400
+          role: system
+          text: 'あなたは、技術的な質問に答える優秀なアシスタントです。具体的な説明と例を含めて回答してください。
+
+            '
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: llm
+      position:
+        x: 685
+        y: 282
+      positionAbsolute:
+        x: 685
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#llm.text#}}'
+        desc: ''
+        selected: false
+        title: 回答
+        type: answer
+        variables: []
+      height: 102
+      id: answer
+      position:
+        x: 980
+        y: 282
+      positionAbsolute:
+        x: 980
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        classes:
+        - id: '1'
+          name: 技術的な質問
+        - id: '2'
+          name: 一般的な質問
+        - id: '1739866934491'
+          name: 雑談
+        desc: ''
+        instructions: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        query_variable_selector:
+        - '1739866719580'
+        - sys.query
+        selected: false
+        title: 質問分類器
+        topics: []
+        type: question-classifier
+        vision:
+          enabled: false
+      height: 212
+      id: '1739866915707'
+      position:
+        x: 380
+        y: 282
+      positionAbsolute:
+        x: 380
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: 98610ba1-f68b-4ca3-85d2-8cb4a9411dba
+          role: system
+          text: 'あなたは親切なアシスタントです。わかりやすく簡潔に答えてください。
+
+            '
+        selected: false
+        title: LLM 2
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1739867004601'
+      position:
+        x: 685
+        y: 417
+      positionAbsolute:
+        x: 685
+        y: 417
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: fb3eff87-49b7-461e-9df1-bd8ed7cec22c
+          role: system
+          text: 'あなたは雑談が得意なアシスタントです。
+
+
+            ユーザーからの質問に対して、フレンドリーに、でも礼儀正しく答えてください。
+
+            '
+        selected: false
+        title: LLM 3
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1739867037673'
+      position:
+        x: 685
+        y: 554
+      positionAbsolute:
+        x: 685
+        y: 554
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1739867004601.text#}}'
+        desc: ''
+        selected: false
+        title: 回答 2
+        type: answer
+        variables: []
+      height: 102
+      id: '1739867115107'
+      position:
+        x: 989
+        y: 417
+      positionAbsolute:
+        x: 989
+        y: 417
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1739867037673.text#}}'
+        desc: ''
+        selected: false
+        title: 回答 3
+        type: answer
+        variables: []
+      height: 102
+      id: '1739867136834'
+      position:
+        x: 989
+        y: 554
+      positionAbsolute:
+        x: 989
+        y: 554
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 296.29062498732947
+      y: 87.58484339353265
+      zoom: 0.7578582832551997

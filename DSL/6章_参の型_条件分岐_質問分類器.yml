@@ -1,0 +1,398 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 参の型_条件分岐_質問分類器
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1738554661407-source-1738559871838-target
+      source: '1738554661407'
+      sourceHandle: source
+      target: '1738559871838'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1738559857941-source-1738559887856-target
+      source: '1738559857941'
+      sourceHandle: source
+      target: '1738559887856'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1738561283299-source-1738561452094-target
+      source: '1738561283299'
+      sourceHandle: source
+      target: '1738561452094'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: question-classifier
+      id: 1738554257651-source-1738564016411-target
+      source: '1738554257651'
+      sourceHandle: source
+      target: '1738564016411'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1738564016411-1-1738554661407-target
+      source: '1738564016411'
+      sourceHandle: '1'
+      target: '1738554661407'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1738564016411-2-1738561283299-target
+      source: '1738564016411'
+      sourceHandle: '2'
+      target: '1738561283299'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1738564016411-1738564085888-1738559857941-target
+      source: '1738564016411'
+      sourceHandle: '1738564085888'
+      target: '1738559857941'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables:
+        - label: 質問本文
+          max_length: 4096
+          options: []
+          required: true
+          type: paragraph
+          variable: question
+      height: 90
+      id: '1738554257651'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        classes:
+        - id: '1'
+          name: 簡単な質問
+        - id: '2'
+          name: 中程度な質問
+        - id: '1738564085888'
+          name: 高度な質問
+        desc: ''
+        instructions: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        query_variable_selector: []
+        selected: false
+        title: 質問分類器
+        topics: []
+        type: question-classifier
+        vision:
+          enabled: false
+      height: 212
+      id: '1738564016411'
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1738554257651'
+          - question
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: 4b38ad23-0166-4238-bdaa-21872ffbff29
+          role: system
+          text: 'あなたは親切なアシスタントです。簡単な質問に対して、わかりやすく簡潔に答えてください。200文字以内で答えてください。
+
+            '
+        - id: 17aa46d3-1079-4433-88ce-5feea6a04b67
+          role: user
+          text: '{{#context#}}'
+        selected: false
+        title: LLM(簡単な質問)
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1738554661407'
+      position:
+        x: 688
+        y: 282
+      positionAbsolute:
+        x: 688
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1738554257651'
+          - question
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o
+          provider: openai
+        prompt_template:
+        - id: 4684acde-71b4-4ed1-bcdf-61fc815a4b47
+          role: system
+          text: 'あなたは博識なアシスタントです。難しい質問に対して、詳細かつ正確に答えてください。必要に応じて、専門的な知識や最新の情報を含めて回答してください。
+
+
+            なお、できるだけ詳しい内容が必要なので出力文字数を気にしないで出力してください。
+
+            '
+        - id: a7281eb9-b90c-4ba2-bc91-60921e591263
+          role: user
+          text: '{{#1738554257651.question#}}'
+        selected: false
+        title: LLM (高度な質問)
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1738559857941'
+      position:
+        x: 683
+        y: 587
+      positionAbsolute:
+        x: 683
+        y: 587
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1738554661407'
+          - text
+          variable: output
+        selected: false
+        title: 終了
+        type: end
+      height: 90
+      id: '1738559871838'
+      position:
+        x: 992
+        y: 282
+      positionAbsolute:
+        x: 992
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1738559857941'
+          - text
+          variable: output
+        selected: false
+        title: 終了 2
+        type: end
+      height: 90
+      id: '1738559887856'
+      position:
+        x: 992
+        y: 587
+      positionAbsolute:
+        x: 992
+        y: 587
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1738554257651'
+          - question
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: 1ed6b10f-6ca6-4872-9b4f-8578cc216a77
+          role: system
+          text: 'あなたは柔軟な対応ができるアシスタントです。中程度の難易度の質問に対して、適度に詳しく、かつ分かりやすく答えてください。
+
+
+            専門的な内容も含めつつ、一般の人にも理解できるよう説明してください。回答は400字程度に収めてください。
+
+            '
+        - id: 8cd445a3-36a3-4a99-93c2-7c2d6b045deb
+          role: user
+          text: '{{#1738554257651.question#}}'
+        selected: false
+        title: LLM (中程度な質問)
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1738561283299'
+      position:
+        x: 683
+        y: 433
+      positionAbsolute:
+        x: 683
+        y: 433
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1738561283299'
+          - text
+          variable: output
+        selected: false
+        title: 終了 3
+        type: end
+      height: 90
+      id: '1738561452094'
+      position:
+        x: 992
+        y: 433
+      positionAbsolute:
+        x: 992
+        y: 433
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 54.5
+      y: 13.5
+      zoom: 1

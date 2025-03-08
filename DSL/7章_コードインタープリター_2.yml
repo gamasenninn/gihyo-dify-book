@@ -1,0 +1,423 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 7章_コードインタープリター_2
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1738911592357-source-1738911700738-target
+      source: '1738911592357'
+      sourceHandle: source
+      target: '1738911700738'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: tool
+      id: 1738911700738-source-1738912163050-target
+      source: '1738911700738'
+      sourceHandle: source
+      target: '1738912163050'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: tool
+      id: 1738911700738-source-1738912204063-target
+      source: '1738911700738'
+      sourceHandle: source
+      target: '1738912204063'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: tool
+      id: 1738911700738-source-1738912271732-target
+      source: '1738911700738'
+      sourceHandle: source
+      target: '1738912271732'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: tool
+      id: 1738912163050-source-1738912382455-target
+      source: '1738912163050'
+      sourceHandle: source
+      target: '1738912382455'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: template-transform
+      id: 1738912382455-source-1738912300861-target
+      source: '1738912382455'
+      sourceHandle: source
+      target: '1738912300861'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: tool
+      id: 1738912204063-source-1738912382455-target
+      source: '1738912204063'
+      sourceHandle: source
+      target: '1738912382455'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: tool
+      id: 1738912271732-source-1738912382455-target
+      source: '1738912271732'
+      sourceHandle: source
+      target: '1738912382455'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: end
+      id: 1738912300861-source-1738912626273-target
+      source: '1738912300861'
+      sourceHandle: source
+      target: '1738912626273'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables:
+        - label: query
+          max_length: 4096
+          options: []
+          required: true
+          type: paragraph
+          variable: query
+      height: 90
+      id: '1738911592357'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1738911592357'
+          - query
+        desc: ''
+        model:
+          completion_params:
+            json_schema: "{\n  \"name\": \"code_extraction\",\n  \"schema\": {\n \
+              \   \"type\": \"object\",\n    \"properties\": {\n      \"language\"\
+              : {\n        \"type\": \"string\",\n        \"enum\": [\"python3\",\
+              \ \"javascript\"],\n        \"description\": \"プログラミング言語 (python3またはjavascript)\"\
+              \n      },\n      \"code\": {\n        \"type\": \"string\",\n     \
+              \   \"description\": \"コード本体\"\n      },\n      \"explain\": {\n   \
+              \     \"type\": \"string\",\n        \"description\": \"プログラムの説明\"\n\
+              \      }\n    },\n    \"required\": [\"language\", \"code\", \"explain\"\
+              ]\n  }\n}"
+            response_format: json_schema
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: 1e719454-94a8-4c21-ab12-849ce5517931
+          role: system
+          text: 'あなたは優秀なプログラマーです。ユーザーからの質問からプログラムコードを書きます。問題をとくためにpython3、もしくはJavaScriptを使うことができます。
+
+            '
+        - role: user
+          text: 'ユーザの質問:
+
+            {{#context#}}'
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1738911700738'
+      position:
+        x: 80
+        y: 415
+      positionAbsolute:
+        x: 80
+        y: 415
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        provider_id: json_process
+        provider_name: json_process
+        provider_type: builtin
+        selected: false
+        title: JSON Parse(Code)
+        tool_configurations:
+          ensure_ascii: 1
+        tool_label: JSON Parse
+        tool_name: parse
+        tool_parameters:
+          content:
+            type: mixed
+            value: '{{#1738911700738.text#}}'
+          json_filter:
+            type: mixed
+            value: code
+        type: tool
+      height: 90
+      id: '1738912163050'
+      position:
+        x: 384
+        y: 415
+      positionAbsolute:
+        x: 384
+        y: 415
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        provider_id: json_process
+        provider_name: json_process
+        provider_type: builtin
+        selected: false
+        title: JSON Parse(language)
+        tool_configurations:
+          ensure_ascii: 1
+        tool_label: JSON Parse
+        tool_name: parse
+        tool_parameters:
+          content:
+            type: mixed
+            value: '{{#1738911700738.text#}}'
+          json_filter:
+            type: mixed
+            value: language
+        type: tool
+      height: 90
+      id: '1738912204063'
+      position:
+        x: 384
+        y: 544
+      positionAbsolute:
+        x: 384
+        y: 544
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        provider_id: json_process
+        provider_name: json_process
+        provider_type: builtin
+        selected: false
+        title: JSON Parse(explain)
+        tool_configurations:
+          ensure_ascii: 1
+        tool_label: JSON Parse
+        tool_name: parse
+        tool_parameters:
+          content:
+            type: mixed
+            value: '{{#1738911700738.text#}}'
+          json_filter:
+            type: mixed
+            value: explain
+        type: tool
+      height: 90
+      id: '1738912271732'
+      position:
+        x: 384
+        y: 672
+      positionAbsolute:
+        x: 384
+        y: 672
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        selected: false
+        template: "## 説明\r\n{{explain}}\r\n\r\n## コード\r\n```\r\n{{code}}\r\n```\r\n\
+          ## 結果\r\n{{result}}"
+        title: テンプレート
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1738912382455'
+          - text
+          variable: result
+        - value_selector:
+          - '1738912163050'
+          - text
+          variable: code
+        - value_selector:
+          - '1738912271732'
+          - text
+          variable: explain
+      height: 54
+      id: '1738912300861'
+      position:
+        x: 988
+        y: 415
+      positionAbsolute:
+        x: 988
+        y: 415
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        provider_id: code
+        provider_name: code
+        provider_type: builtin
+        selected: false
+        title: Code Interpreter
+        tool_configurations: {}
+        tool_label: Code Interpreter
+        tool_name: simple_code
+        tool_parameters:
+          code:
+            type: mixed
+            value: '{{#1738912163050.text#}}'
+          language:
+            type: mixed
+            value: '{{#1738912204063.text#}}'
+        type: tool
+      height: 54
+      id: '1738912382455'
+      position:
+        x: 688
+        y: 415
+      positionAbsolute:
+        x: 688
+        y: 415
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1738912300861'
+          - output
+          variable: output
+        - value_selector: []
+          variable: ''
+        selected: true
+        title: 終了
+        type: end
+      height: 90
+      id: '1738912626273'
+      position:
+        x: 1292
+        y: 415
+      positionAbsolute:
+        x: 1292
+        y: 415
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -166.5
+      y: -191.5
+      zoom: 1

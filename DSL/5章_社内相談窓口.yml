@@ -1,0 +1,370 @@
+app:
+  description: 社内相談窓口
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 5章_社内相談窓口
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1739588017922-source-1739588173045-target
+      source: '1739588017922'
+      sourceHandle: source
+      target: '1739588173045'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: knowledge-retrieval
+      id: 1739588173045-source-1739591433205-target
+      source: '1739588173045'
+      sourceHandle: source
+      target: '1739591433205'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1739591433205-source-1739591568138-target
+      source: '1739591433205'
+      sourceHandle: source
+      target: '1739591568138'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 1739591568138-source-1739592136932-target
+      source: '1739591568138'
+      sourceHandle: source
+      target: '1739592136932'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1739592136932-source-1739589009017-target
+      source: '1739592136932'
+      sourceHandle: source
+      target: '1739589009017'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables:
+        - label: テキスト入力
+          max_length: 256
+          options: []
+          required: true
+          type: text-input
+          variable: input
+      height: 90
+      id: '1739588017922'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1739588017922'
+          - input
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: f38109f9-994d-4130-a08d-5629d09f6686
+          role: system
+          text: 'あなたは豊かな共感力をもった優秀な相談者です。
+
+
+            あなたの回答は質問者の励みになります。
+
+
+            ユーザーの質問に親身に共感をもって答えてください。
+
+
+            ときどき有名人の名言なども交えて答えてみると効果的です。質問者が求めるものは時として回答そのものではなく
+
+
+            あなたの共感だったりしますので、バランスよく答えてください。
+
+            '
+        - id: 03e4a9c8-3739-469d-8718-5d48cc0e33e5
+          role: user
+          text: '{{#context#}}'
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1739588173045'
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1739592136932'
+          - text
+          variable: output
+        selected: false
+        title: 終了
+        type: end
+      height: 90
+      id: '1739589009017'
+      position:
+        x: 1588
+        y: 282
+      positionAbsolute:
+        x: 1588
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        dataset_ids:
+        - fd82493f-cfd7-4aa1-84dc-237e3046a900
+        desc: ''
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: reranking_model
+          reranking_model:
+            model: rerank-english-v2.0
+            provider: cohere
+          top_k: 4
+        query_variable_selector:
+        - '1739588017922'
+        - input
+        retrieval_mode: multiple
+        selected: false
+        title: 知識取得
+        type: knowledge-retrieval
+      height: 92
+      id: '1739591433205'
+      position:
+        x: 688
+        y: 282
+      positionAbsolute:
+        x: 688
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1739591433205'
+          - result
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: 732bd0b6-0046-4229-b642-7d3cb0ab04ba
+          role: system
+          text: 'あなたは経験豊富な総務担当者です。ユーザーからの相談に対して、次のポイントに注目して回答してください。
+
+
+            ・適用すべき就業規則項目を特定し、列挙する。
+
+            ・ それぞれの規則の具体的な適用方法を説明する。
+
+            ・ 相談者が取るべき具体的な対応策を提案する。
+
+            ・ 常に冷静かつ専門的な態度を保ち、事実に基づいたアドバイスを提供する。
+
+
+            '
+        - id: 4eafce52-5ae4-41c8-80ad-80714f304f5e
+          role: user
+          text: '##ユーザからの相談内容
+
+            {{#1739588017922.input#}}
+
+            ##就業規則の知識
+
+            {{#context#}}'
+        selected: false
+        title: LLM 総務担当者
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1739591568138'
+      position:
+        x: 988
+        y: 282
+      positionAbsolute:
+        x: 988
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1739591433205'
+          - result
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o
+          provider: openai
+        prompt_template:
+        - id: 090f3274-a391-4be2-9ff7-4c8c6c6a4bf0
+          role: system
+          text: 'あなたは会社の優秀な人事の責任者です。
+
+            職場環境の改善と従業員の心理的ケアを重視することが求められています。常に温かみのある口調で、相談者に寄り添う姿勢を示すことが大切です。
+
+            ユーザからの質問をもとに、共感者の意見と総務担当者の分析を踏まえ、以下の点を考慮して最終的なアドバイスを提供してください。必要であれば就業規則を参照してください。
+
+
+            ・短期的な対応と長期的な対策を提案する。
+
+            ・ 会社の方針や価値観を反映させつつ、個人の尊厳を尊重するバランスの取れたアドバイスを提供する。
+
+            ・就業規則の出典を明示する'
+        - id: f69d77af-b35f-4642-888c-b9171b8f8790
+          role: user
+          text: '##ユーザからの質問
+
+            {{#1739588017922.input#}}
+
+            ##共感者の意見
+
+            {{#1739588173045.text#}}
+
+            ##総務担当者の分析
+
+            {{#1739591568138.text#}}
+
+            ##就業規則の知識
+
+            {{#context#}}'
+        selected: true
+        title: LLM 責任者
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1739592136932'
+      position:
+        x: 1288
+        y: 282
+      positionAbsolute:
+        x: 1288
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -535.8730154595964
+      y: -131.12436208403074
+      zoom: 1.1486983549970358
