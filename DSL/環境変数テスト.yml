@@ -1,0 +1,224 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 環境変数テスト
+  use_icon_as_answer_icon: false
+dependencies: []
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables:
+  - description: ''
+    id: fd4a9037-b1f9-4452-9d67-f0b6127d3b1c
+    name: ENV_TEST
+    selector:
+    - env
+    - ENV_TEST
+    value: これはテスト用の変数です
+    value_type: string
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 5
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: template-transform
+      id: 1740386888591-source-1740389710396-target
+      source: '1740386888591'
+      sourceHandle: source
+      target: '1740389710396'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: end
+      id: 1740389710396-source-1740387202548-target
+      source: '1740389710396'
+      sourceHandle: source
+      target: '1740387202548'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: code
+      id: 1740386811295-source-1740386888591-target
+      source: '1740386811295'
+      sourceHandle: source
+      target: '1740386888591'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables:
+        - label: value
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: value
+        - label: value2
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: value2
+      height: 116
+      id: '1740386811295'
+      position:
+        x: 345
+        y: 282
+      positionAbsolute:
+        x: 345
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\n\ndef main(arg1: str, arg2: str,env_value: str) -> dict:\n    return\
+          \ {\n        \"result\": arg1 + env_value + arg2,\n    }\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: コード
+        type: code
+        variables:
+        - value_selector:
+          - '1740386811295'
+          - value
+          variable: arg1
+        - value_selector:
+          - '1740386811295'
+          - value2
+          variable: arg2
+        - value_selector:
+          - env
+          - ENV_TEST
+          variable: env_value
+      height: 54
+      id: '1740386888591'
+      position:
+        x: 684
+        y: 282
+      positionAbsolute:
+        x: 684
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1740389710396'
+          - output
+          variable: output
+        selected: false
+        title: 終了
+        type: end
+      height: 90
+      id: '1740387202548'
+      position:
+        x: 1004
+        y: 282
+      positionAbsolute:
+        x: 1004
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        selected: false
+        template: "{{ code_value }}\r\n{{ env_value }}"
+        title: テンプレート
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1740386888591'
+          - result
+          variable: code_value
+        - value_selector:
+          - env
+          - ENV_TEST
+          variable: env_value
+      height: 54
+      id: '1740389710396'
+      position:
+        x: 690
+        y: 360
+      positionAbsolute:
+        x: 690
+        y: 360
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 117.5
+      y: -144
+      zoom: 1
