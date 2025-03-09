@@ -1,0 +1,155 @@
+app:
+  description: エージェントのテストです
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: agent-chat
+  name: 社内総務ボット
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/maths:0.0.3@672d22e7aca6f346bf6bf9c5d31e2ce4634d295f61b6aa1f5ee2632f4ed3fdb0
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/duckduckgo:0.0.4@5924a15181dc33ce973caa9bf1a47295651b437227f59881445f332e8923604e
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/openai:0.0.11@390c87cc0f17370a70d3b214cd71a8de81fe9d6b52e6a38287acde034138b672
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/wikipedia:0.0.3@c15c50172ae5abf681847180509a8df32d5944c3be3c91066d61c931b82b3470
+kind: app
+model_config:
+  agent_mode:
+    enabled: true
+    max_iteration: 5
+    prompt: null
+    strategy: function_call
+    tools:
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: langgenius/maths/maths
+      provider_name: langgenius/maths/maths
+      provider_type: builtin
+      tool_label: Evaluate Math Expression
+      tool_name: eval_expression
+      tool_parameters:
+        expression: ''
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: langgenius/wikipedia/wikipedia
+      provider_name: langgenius/wikipedia/wikipedia
+      provider_type: builtin
+      tool_label: WikipediaSearch
+      tool_name: wikipedia_search
+      tool_parameters:
+        language: ''
+        query: ''
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: langgenius/duckduckgo/duckduckgo
+      provider_name: langgenius/duckduckgo/duckduckgo
+      provider_type: builtin
+      tool_label: DuckDuckGo Search
+      tool_name: ddgo_search
+      tool_parameters:
+        max_results: ''
+        query: ''
+        require_summary: ''
+    - enabled: true
+      notAuthor: false
+      provider_id: time
+      provider_name: time
+      provider_type: builtin
+      tool_label: Current Time
+      tool_name: current_time
+      tool_parameters:
+        format: '%Y-%m-%d %H:%M:%S'
+        timezone: Asia/Tokyo
+  annotation_reply:
+    enabled: false
+  chat_prompt_config: {}
+  completion_prompt_config: {}
+  dataset_configs:
+    datasets:
+      datasets:
+      - dataset:
+          enabled: true
+          id: 4b6d470a-a130-44ba-82d5-ffa877797f69
+    reranking_enable: false
+    reranking_mode: reranking_model
+    reranking_model:
+      reranking_model_name: rerank-english-v2.0
+      reranking_provider_name: langgenius/cohere/cohere
+    retrieval_model: multiple
+    top_k: 4
+  dataset_query_variable: ''
+  external_data_tools: []
+  file_upload:
+    allowed_file_extensions:
+    - .JPG
+    - .JPEG
+    - .PNG
+    - .GIF
+    - .WEBP
+    - .SVG
+    - .MP4
+    - .MOV
+    - .MPEG
+    - .MPGA
+    allowed_file_types: []
+    allowed_file_upload_methods:
+    - remote_url
+    - local_file
+    enabled: false
+    image:
+      detail: high
+      enabled: false
+      number_limits: 3
+      transfer_methods:
+      - remote_url
+      - local_file
+    number_limits: 3
+  model:
+    completion_params:
+      stop: []
+    mode: chat
+    name: gpt-4o-mini
+    provider: langgenius/openai/openai
+  more_like_this:
+    enabled: false
+  opening_statement: ''
+  pre_prompt: "あなたは高度なAIエージェントとして機能します。ユーザーの指示に基づいてタスクを理解し、計画を立て、実行し、結果をモニタリングする能力があります。常に効率的、正確、そして倫理的に行動してください。以下の手順に従ってタスクを実行してください：\n\
+    \n1. 目標設定：\n   ユーザーの入力を分析し、具体的で測定可能な目標を設定してください。目標は明確かつ達成可能であるべきです。\n\n2. 計画立案：\n\
+    \   設定した目標を達成するための詳細な計画を立ててください。利用可能なツールや資源を考慮し、最も効果的なアプローチを選択してください。\n\n3. ツール選択：\n\
+    \   計画を実行するために最適なツールを選択してください。利用可能なツール以下のものです。\n- 就業規則に関しては就業規則モデルの知識を参照します。\n\
+    - 現在時間の取得が必要な場合はcurrent_timeが便利です。\n- 計算が必要な場合はeval_expressionが便利です。\n- 用語など詳しく調べるときはwikipedia_searchが便利です。\n\
+    - Webの検索が必要な場合はddgo_searchが便利です。\n\n4. タスク実行：\n   選択したツールを使用してタスクを実行してください。各ステップを詳細に説明し、得られた中間結果も報告してください。\n\
+    \n5. モニタリングと結果評価：\n   タスク実行中および実行後に、結果を継続的に評価してください。評価基準には、目標達成度、正確性、効率性、想定外の影響などが含まれます。問題や改善の余地を特定してください。\n\
+    \n6. フィードバックと調整：\n   評価結果に基づいて、必要に応じて戦略を調整し、アプローチを最適化してください。新たに必要となる情報や資源があれば指摘してください。\n\
+    \n各ステップで、あなたの思考プロセスを明確に説明し、重要な決定の根拠を提供してください。ユーザーからの追加情報や指示が必要な場合は、適切に質問してください。"
+  prompt_type: simple
+  retriever_resource:
+    enabled: true
+  sensitive_word_avoidance:
+    configs: []
+    enabled: false
+    type: ''
+  speech_to_text:
+    enabled: false
+  suggested_questions: []
+  suggested_questions_after_answer:
+    enabled: false
+  text_to_speech:
+    enabled: false
+    language: ''
+    voice: ''
+  user_input_form: []
+version: 0.1.5
