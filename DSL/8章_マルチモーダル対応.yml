@@ -26,6 +26,12 @@ workflow:
         image_file_size_limit: 10
         video_file_size_limit: 100
         workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
       number_limits: 1
     opening_statement: ''
     retriever_resource:
@@ -427,6 +433,6 @@ workflow:
       type: custom
       width: 244
     viewport:
-      x: -670
-      y: -4.5
+      x: -317
+      y: -58.5
       zoom: 1

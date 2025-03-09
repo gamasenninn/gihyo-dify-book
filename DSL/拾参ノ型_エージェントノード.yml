@@ -1,0 +1,600 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 拾参ノ型_エージェントノード
+  use_icon_as_answer_icon: false
+dependencies: []
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 5
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: agent
+      id: 1740714902531-source-1740715559634-target
+      source: '1740714902531'
+      sourceHandle: source
+      target: '1740715559634'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: agent
+        targetType: end
+      id: 1740715559634-source-1740720472408-target
+      source: '1740715559634'
+      sourceHandle: source
+      target: '1740720472408'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 開始
+        type: start
+        variables:
+        - label: query
+          max_length: 4096
+          options: []
+          required: true
+          type: paragraph
+          variable: query
+      height: 90
+      id: '1740714902531'
+      position:
+        x: 80
+        y: 294.6356819049674
+      positionAbsolute:
+        x: 80
+        y: 294.6356819049674
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        agent_parameters:
+          instruction:
+            type: constant
+            value: '1. ユーザからの問い合わせにしたがってddgo_searchを起動する
+
+              2. もっとも適切な回答を３つ選び、そのURLでjina_readerを呼び内容を取得する。
+
+              3. 上記の内容をまとめ、最終的に適切な回答を出力する。そのさい出典資料として上記のURLを、また関連資料として検索した５件までのURLを表示してください。'
+          maximum_iterations:
+            type: constant
+            value: 4
+          model:
+            type: constant
+            value:
+              completion_params: {}
+              mode: chat
+              model: gpt-4o-mini
+              model_type: llm
+              provider: langgenius/openai/openai
+              type: model-selector
+          query:
+            type: constant
+            value: '{{#1740714902531.query#}}'
+          tools:
+            type: constant
+            value:
+            - enabled: true
+              extra:
+                description: Web検索が必要な時に使用します。
+              parameters:
+                query:
+                  auto: 1
+                  value: null
+              provider_name: langgenius/duckduckgo/duckduckgo
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: The search query.
+                  ja_JP: The search query.
+                  pt_BR: The search query.
+                  zh_Hans: 搜索查询语句。
+                label:
+                  en_US: Query string
+                  ja_JP: Query string
+                  pt_BR: Query string
+                  zh_Hans: 查询语句
+                llm_description: Key words for searching
+                max: null
+                min: null
+                name: query
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: 5
+                form: form
+                human_description:
+                  en_US: The maximum number of results to return.
+                  ja_JP: The maximum number of results to return.
+                  pt_BR: The maximum number of results to return.
+                  zh_Hans: 最大结果数量
+                label:
+                  en_US: Max results
+                  ja_JP: Max results
+                  pt_BR: Max results
+                  zh_Hans: 最大结果数量
+                llm_description: ''
+                max: null
+                min: null
+                name: max_results
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: number
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: Whether to pass the search results to llm for summarization.
+                  ja_JP: Whether to pass the search results to llm for summarization.
+                  pt_BR: Whether to pass the search results to llm for summarization.
+                  zh_Hans: 是否需要将搜索结果传给大模型总结
+                label:
+                  en_US: Require Summary
+                  ja_JP: Require Summary
+                  pt_BR: Require Summary
+                  zh_Hans: 是否总结
+                llm_description: ''
+                max: null
+                min: null
+                name: require_summary
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              settings:
+                max_results:
+                  value: 5
+                require_summary:
+                  value: 0
+              tool_label: DuckDuckGo Search
+              tool_name: ddgo_search
+              type: builtin
+            - enabled: true
+              extra:
+                description: URLからWebの内容を読み取る必要な時に使用します。
+              parameters:
+                request_params:
+                  auto: 1
+                  value: null
+                url:
+                  auto: 1
+                  value: null
+              provider_name: langgenius/jina_tool/jina
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: Web link
+                  ja_JP: Web link
+                  pt_BR: URL da web
+                  zh_Hans: 网页链接
+                label:
+                  en_US: URL
+                  ja_JP: URL
+                  pt_BR: URL
+                  zh_Hans: 网址
+                llm_description: url para scraping
+                max: null
+                min: null
+                name: url
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 'request parameters, format: {"key1": "value1", "key2": "value2"}
+
+                    '
+                  ja_JP: 'request parameters, format: {"key1": "value1", "key2": "value2"}
+
+                    '
+                  pt_BR: 'parâmetros de solicitação, formato: {"key1": "value1", "key2":
+                    "value2"}
+
+                    '
+                  zh_Hans: '请求参数，格式：{"key1": "value1", "key2": "value2"}
+
+                    '
+                label:
+                  en_US: Request params
+                  ja_JP: Request params
+                  pt_BR: Parâmetros de solicitação
+                  zh_Hans: 请求参数
+                llm_description: request parameters
+                max: null
+                min: null
+                name: request_params
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: form
+                human_description:
+                  en_US: css selector for scraping specific elements
+                  ja_JP: css selector for scraping specific elements
+                  pt_BR: css selector para scraping de elementos específicos
+                  zh_Hans: css 选择器用于抓取特定元素
+                label:
+                  en_US: Target selector
+                  ja_JP: Target selector
+                  pt_BR: Seletor de destino
+                  zh_Hans: 目标选择器
+                llm_description: css selector of the target element to scrape
+                max: null
+                min: null
+                name: target_selector
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: form
+                human_description:
+                  en_US: css selector for waiting for specific elements
+                  ja_JP: css selector for waiting for specific elements
+                  pt_BR: css selector para aguardar elementos específicos
+                  zh_Hans: css 选择器用于等待特定元素
+                label:
+                  en_US: Wait for selector
+                  ja_JP: Wait for selector
+                  pt_BR: Aguardar por seletor
+                  zh_Hans: 等待选择器
+                llm_description: css selector of the target element to wait for
+                max: null
+                min: null
+                name: wait_for_selector
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: 'Captions all images at the specified URL, adding ''Image
+                    [idx]: [caption]'' as an alt tag for those without one. This allows
+                    downstream LLMs to interact with the images in activities such
+                    as reasoning and summarizing.'
+                  ja_JP: 'Captions all images at the specified URL, adding ''Image
+                    [idx]: [caption]'' as an alt tag for those without one. This allows
+                    downstream LLMs to interact with the images in activities such
+                    as reasoning and summarizing.'
+                  pt_BR: 'Adiciona legendas a todas as imagens na URL especificada,
+                    adicionando ''Imagem [idx]: [legenda]'' como uma tag alt para
+                    aquelas que não têm uma. Isso permite que os modelos LLM inferiores
+                    interajam com as imagens em atividades como raciocínio e resumo.'
+                  zh_Hans: '为指定 URL 上的所有图像添加标题，为没有标题的图像添加“Image [idx]: [caption]”作为
+                    alt 标签，以支持下游模型的图像交互。'
+                label:
+                  en_US: Image caption
+                  ja_JP: Image caption
+                  pt_BR: Legenda da imagem
+                  zh_Hans: 图片说明
+                llm_description: Captions all images at the specified URL
+                max: null
+                min: null
+                name: image_caption
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: A "Buttons & Links" section will be created at the end. This
+                    helps the downstream LLMs or web agents navigating the page or
+                    take further actions.
+                  ja_JP: A "Buttons & Links" section will be created at the end. This
+                    helps the downstream LLMs or web agents navigating the page or
+                    take further actions.
+                  pt_BR: Um "Botões & Links" section will be created at the end. This
+                    helps the downstream LLMs or web agents navigating the page or
+                    take further actions.
+                  zh_Hans: 末尾将添加“按钮和链接”部分，方便下游模型或网络代理做页面导航或执行进一步操作。
+                label:
+                  en_US: Gather all links at the end
+                  ja_JP: Gather all links at the end
+                  pt_BR: Coletar todos os links ao final
+                  zh_Hans: 将所有链接集中到最后
+                llm_description: Gather all links at the end
+                max: null
+                min: null
+                name: gather_all_links_at_the_end
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: An "Images" section will be created at the end. This gives
+                    the downstream LLMs an overview of all visuals on the page, which
+                    may improve reasoning.
+                  ja_JP: An "Images" section will be created at the end. This gives
+                    the downstream LLMs an overview of all visuals on the page, which
+                    may improve reasoning.
+                  pt_BR: Um "Imagens" section will be created at the end. This gives
+                    the downstream LLMs an overview of all visuals on the page, which
+                    may improve reasoning.
+                  zh_Hans: 末尾会新增“图片”部分，方便下游模型全面了解页面的视觉内容，提升推理效果。
+                label:
+                  en_US: Gather all images at the end
+                  ja_JP: Gather all images at the end
+                  pt_BR: Coletar todas as imagens ao final
+                  zh_Hans: 将所有图片集中到最后
+                llm_description: Gather all images at the end
+                max: null
+                min: null
+                name: gather_all_images_at_the_end
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: null
+                form: form
+                human_description:
+                  en_US: Use proxy to access URLs
+                  ja_JP: Use proxy to access URLs
+                  pt_BR: Use proxy to access URLs
+                  zh_Hans: 利用代理访问 URL
+                label:
+                  en_US: Proxy server
+                  ja_JP: Proxy server
+                  pt_BR: Servidor de proxy
+                  zh_Hans: 代理服务器
+                llm_description: Use proxy to access URLs
+                max: null
+                min: null
+                name: proxy_server
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: Bypass the Cache
+                  ja_JP: Bypass the Cache
+                  pt_BR: Ignorar o cache
+                  zh_Hans: 是否绕过缓存
+                label:
+                  en_US: Bypass the Cache
+                  ja_JP: Bypass the Cache
+                  pt_BR: Ignorar o cache
+                  zh_Hans: 绕过缓存
+                llm_description: bypass the cache
+                max: null
+                min: null
+                name: no_cache
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: 0
+                form: form
+                human_description:
+                  en_US: Enable summary for the output
+                  ja_JP: Enable summary for the output
+                  pt_BR: Habilitar resumo para a saída
+                  zh_Hans: 为输出启用摘要
+                label:
+                  en_US: Enable summary
+                  ja_JP: Enable summary
+                  pt_BR: Habilitar resumo
+                  zh_Hans: 是否启用摘要
+                llm_description: enable summary
+                max: null
+                min: null
+                name: summary
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: 3
+                form: form
+                human_description:
+                  en_US: Number of times to retry the request if it fails
+                  ja_JP: Number of times to retry the request if it fails
+                  pt_BR: Número de vezes para repetir a solicitação se falhar
+                  zh_Hans: 请求失败时重试的次数
+                label:
+                  en_US: Retry
+                  ja_JP: Retry
+                  pt_BR: Repetir
+                  zh_Hans: 重试
+                llm_description: Number of times to retry the request if it fails
+                max: null
+                min: null
+                name: max_retries
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: number
+              settings:
+                gather_all_images_at_the_end:
+                  value: 0
+                gather_all_links_at_the_end:
+                  value: 0
+                image_caption:
+                  value: 0
+                max_retries:
+                  value: 3
+                no_cache:
+                  value: 0
+                proxy_server:
+                  value: null
+                summary:
+                  value: 0
+                target_selector:
+                  value: null
+                wait_for_selector:
+                  value: null
+              tool_label: Fetch Single Page
+              tool_name: jina_reader
+              type: builtin
+        agent_strategy_label: FunctionCalling
+        agent_strategy_name: function_calling
+        agent_strategy_provider_name: langgenius/agent/agent
+        desc: ''
+        output_schema: null
+        plugin_unique_identifier: langgenius/agent:0.0.8@6dd1206901fa166f1a631fb3f0f8eb08f9e7cf54043b7fe45fcb011218cad7a2
+        selected: false
+        title: エージェント
+        type: agent
+      height: 198
+      id: '1740715559634'
+      position:
+        x: 384
+        y: 294.6356819049674
+      positionAbsolute:
+        x: 384
+        y: 294.6356819049674
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1740715559634'
+          - text
+          variable: output
+        selected: false
+        title: 終了
+        type: end
+      height: 90
+      id: '1740720472408'
+      position:
+        x: 688
+        y: 294.6356819049674
+      positionAbsolute:
+        x: 688
+        y: 294.6356819049674
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 38.74478731640568
+      y: -150.1623959227095
+      zoom: 1.0000000000000002
